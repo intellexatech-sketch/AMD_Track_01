@@ -26,7 +26,8 @@ async def route_query(request: QueryRequest):
         cost=result["cost"],
         latency_ms=result["latency_ms"],
         cached=result["cached"],
-        confidence=result.get("confidence", 1.0)
+        confidence=result.get("confidence", 1.0),
+        explanation=result.get("explanation")
     )
 
 @app.get("/metrics")
@@ -40,11 +41,7 @@ async def health_check():
 @app.get("/models")
 async def list_models():
     from app.config import settings
-    return {
-        "cheap": settings.MODEL_CHEAP,
-        "medium": settings.MODEL_MEDIUM,
-        "expensive": settings.MODEL_EXPENSIVE
-    }
+    return [{"name": m["name"], "capabilities": m.get("capabilities", [])} for m in settings.models]
 
 from fastapi.staticfiles import StaticFiles
 import os

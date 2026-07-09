@@ -16,6 +16,7 @@ class QueryResponse(BaseModel):
     latency_ms: float
     cached: bool
     confidence: float
+    explanation: Optional[Dict[str, Any]] = None
 
 class BenchmarkRequest(BaseModel):
     dataset_path: str

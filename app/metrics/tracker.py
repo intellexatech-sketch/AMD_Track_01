@@ -18,22 +18,34 @@ class MetricsTracker:
                     cost REAL,
                     confidence REAL,
                     cached BOOLEAN,
+                    prompt_features TEXT,
+                    complexity_score REAL,
+                    retry_count INTEGER,
                     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             """)
             
     def log_request(self, data: dict):
+        import json
+        explanation = data.get("explanation", {})
+        
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("""
-                INSERT INTO metrics (model, tokens, latency, cost, confidence, cached)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO metrics (
+                    model, tokens, latency, cost, confidence, cached,
+                    prompt_features, complexity_score, retry_count
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (
                 data.get("model_used", "unknown"),
                 data.get("tokens", 0),
                 data.get("latency_ms", 0.0),
                 data.get("cost", 0.0),
                 data.get("confidence", 0.0),
-                data.get("cached", False)
+                data.get("cached", False),
+                json.dumps(explanation.get("prompt_features", {})),
+                explanation.get("complexity_score", 0.0),
+                explanation.get("retry_count", 0)
             ))
             
     def get_aggregate_metrics(self):

@@ -1,0 +1,12 @@
+{
+  "weights": {
+    "capability_weight": 0.5,
+    "cost_weight": 0.3,
+    "latency_weight": 0.1,
+    "success_weight": 0.1
+  },
+  "thresholds": {
+    "confidence_threshold": 0.9,
+    "max_retries": 2
+  }
+}

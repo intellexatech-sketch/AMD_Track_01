@@ -1,7 +1,9 @@
 import litellm
 import time
+import os
 from app.config import settings
 
+os.environ["FIREWORKS_API_KEY"] = settings.FIREWORKS_API_KEY
 litellm.api_key = settings.FIREWORKS_API_KEY
 litellm.drop_params = True
 

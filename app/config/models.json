@@ -1,0 +1,29 @@
+[
+  {
+    "name": "accounts/fireworks/models/glm-5p1",
+    "context_length": 8192,
+    "input_cost_per_1k": 0.0001,
+    "output_cost_per_1k": 0.0002,
+    "relative_latency": 0.2,
+    "capabilities": ["general", "summarization", "translation", "short-context"],
+    "historical_success_rate": 0.85
+  },
+  {
+    "name": "accounts/fireworks/models/gpt-oss-120b",
+    "context_length": 32768,
+    "input_cost_per_1k": 0.0005,
+    "output_cost_per_1k": 0.001,
+    "relative_latency": 0.6,
+    "capabilities": ["general", "reasoning", "creative-writing", "rag", "long-context"],
+    "historical_success_rate": 0.92
+  },
+  {
+    "name": "accounts/fireworks/models/deepseek-v4-pro",
+    "context_length": 128000,
+    "input_cost_per_1k": 0.002,
+    "output_cost_per_1k": 0.005,
+    "relative_latency": 1.0,
+    "capabilities": ["coding", "math", "sql", "json", "complex-reasoning", "agent-planning", "debugging"],
+    "historical_success_rate": 0.98
+  }
+]
