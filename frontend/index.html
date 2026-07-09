@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid Token-Efficient Routing Agent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Include icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="background">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fa-solid fa-microchip"></i>
+                <h1>Hybrid Token-Efficient Routing Agent</h1>
+            </div>
+            <p class="subtitle">Dynamically routes user queries to the most cost-effective Fireworks AI model.</p>
+        </header>
+
+        <main class="grid-layout">
+            <!-- Left Column: Chat/Interaction -->
+            <section class="interaction-panel glass-panel">
+                <div class="input-area">
+                    <label for="query-input">Ask a question or provide a prompt:</label>
+                    <textarea id="query-input" placeholder="e.g., Write a python function to calculate the fibonacci sequence..."></textarea>
+                    <button id="send-btn" class="primary-btn">
+                        <span>Send Query</span>
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <div class="output-area">
+                    <div class="output-header">
+                        <h2>Response</h2>
+                        <span id="status-badge" class="badge hidden">Success</span>
+                    </div>
+                    <div id="response-content" class="response-box">
+                        <p class="placeholder-text">The model's response will appear here.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Metrics & Info -->
+            <section class="metrics-panel">
+                <div class="glass-panel stats-card">
+                    <h2><i class="fa-solid fa-chart-pie"></i> Request Metadata</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Model Used</span>
+                            <span class="stat-value highlight" id="meta-model">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Tokens</span>
+                            <span class="stat-value" id="meta-tokens">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Cost</span>
+                            <span class="stat-value" id="meta-cost">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Latency</span>
+                            <span class="stat-value" id="meta-latency">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Confidence</span>
+                            <span class="stat-value" id="meta-confidence">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Cached</span>
+                            <span class="stat-value" id="meta-cached">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel aggregate-card mt-4">
+                    <h2><i class="fa-solid fa-server"></i> Aggregate Metrics</h2>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Requests</span>
+                            <span class="stat-value" id="agg-total">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Cache Hits</span>
+                            <span class="stat-value text-green" id="agg-cache">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Tokens</span>
+                            <span class="stat-value" id="agg-tokens">-</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Cost</span>
+                            <span class="stat-value text-gold" id="agg-cost">-</span>
+                        </div>
+                    </div>
+                    <button id="refresh-metrics-btn" class="secondary-btn mt-3">
+                        <i class="fa-solid fa-arrows-rotate"></i> Refresh Metrics
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
