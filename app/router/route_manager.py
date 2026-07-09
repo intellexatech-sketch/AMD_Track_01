@@ -85,6 +85,8 @@ class RouteManager:
                     
                 if confidence >= threshold:
                     break
+            else:
+                print(f"Model {model_name} failed: {result['content']}")
             
             explanation["retry_count"] += 1
 

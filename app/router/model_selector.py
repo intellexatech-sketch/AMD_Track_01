@@ -3,14 +3,7 @@ from app.config import settings
 
 class ModelSelector:
     def __init__(self):
-        self.models = settings.models
-        self.config = settings.routing_config
-        self.weights = self.config.get("weights", {})
-        
-        self.w_cap = self.weights.get("capability_weight", 0.5)
-        self.w_cost = self.weights.get("cost_weight", 0.3)
-        self.w_lat = self.weights.get("latency_weight", 0.1)
-        self.w_succ = self.weights.get("success_weight", 0.1)
+        pass
 
     def _score_capability(self, model: dict, features: dict, complexity: float) -> float:
         caps = set(model.get("capabilities", []))
@@ -29,6 +22,7 @@ class ModelSelector:
         add_req(features.get("has_sql"), "sql", 1.0)
         add_req(features.get("has_json"), "json", 0.5)
         add_req(features.get("has_reasoning") or complexity > 0.6, "complex-reasoning", 1.0)
+        add_req(features.get("has_reasoning") or complexity > 0.8, "thinking", 1.0)
         add_req(features.get("has_reasoning") or complexity > 0.6, "reasoning", 0.5)
         add_req(features.get("est_tokens", 0) > 2000, "long-context", 1.0)
         
@@ -41,12 +35,21 @@ class ModelSelector:
         return score / max_possible
 
     def rank_models(self, features: dict, complexity: float) -> List[Dict[str, Any]]:
+        models = settings.models
+        config = settings.routing_config
+        weights = config.get("weights", {})
+        
+        w_cap = weights.get("capability_weight", 0.5)
+        w_cost = weights.get("cost_weight", 0.3)
+        w_lat = weights.get("latency_weight", 0.1)
+        w_succ = weights.get("success_weight", 0.1)
+        
         est_tokens = features.get("est_tokens", 0)
         # Assuming output is roughly equal to input for estimation purposes
         est_total_tokens = est_tokens * 2 
         
         ranked = []
-        for model in self.models:
+        for model in models:
             # Context window check
             if est_total_tokens > model.get("context_length", 8192):
                 continue
@@ -66,10 +69,10 @@ class ModelSelector:
             success_rate = model.get("historical_success_rate", 0.9)
             
             overall_score = (
-                (self.w_cap * cap_score) - 
-                (self.w_cost * norm_cost) - 
-                (self.w_lat * norm_lat) + 
-                (self.w_succ * success_rate)
+                (w_cap * cap_score) - 
+                (w_cost * norm_cost) - 
+                (w_lat * norm_lat) + 
+                (w_succ * success_rate)
             )
             
             ranked.append({
