@@ -1,9 +1,9 @@
 {
   "weights": {
-    "capability_weight": 0.5,
-    "cost_weight": 0.3,
-    "latency_weight": 0.1,
-    "success_weight": 0.1
+    "capability_weight": 0.8,
+    "cost_weight": 0.0,
+    "latency_weight": 0.0,
+    "success_weight": 0.2
   },
   "thresholds": {
     "confidence_threshold": 0.9,
