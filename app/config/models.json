@@ -5,7 +5,12 @@
     "input_cost_per_1k": 0.0001,
     "output_cost_per_1k": 0.0002,
     "relative_latency": 0.2,
-    "capabilities": ["general", "summarization", "translation", "short-context"],
+    "capabilities": [
+      "general",
+      "summarization",
+      "translation",
+      "short-context"
+    ],
     "historical_success_rate": 0.85
   },
   {
@@ -14,7 +19,12 @@
     "input_cost_per_1k": 0.0003,
     "output_cost_per_1k": 0.0005,
     "relative_latency": 0.4,
-    "capabilities": ["coding", "debugging", "sql", "json"],
+    "capabilities": [
+      "coding",
+      "debugging",
+      "sql",
+      "json"
+    ],
     "historical_success_rate": 0.90
   },
   {
@@ -23,7 +33,13 @@
     "input_cost_per_1k": 0.0005,
     "output_cost_per_1k": 0.001,
     "relative_latency": 0.6,
-    "capabilities": ["general", "reasoning", "creative-writing", "rag", "long-context"],
+    "capabilities": [
+      "general",
+      "reasoning",
+      "creative-writing",
+      "rag",
+      "long-context"
+    ],
     "historical_success_rate": 0.92
   },
   {
@@ -32,7 +48,12 @@
     "input_cost_per_1k": 0.0006,
     "output_cost_per_1k": 0.0012,
     "relative_latency": 0.7,
-    "capabilities": ["general", "long-context", "summarization", "extraction"],
+    "capabilities": [
+      "general",
+      "long-context",
+      "summarization",
+      "extraction"
+    ],
     "historical_success_rate": 0.94
   },
   {
@@ -41,7 +62,11 @@
     "input_cost_per_1k": 0.0015,
     "output_cost_per_1k": 0.003,
     "relative_latency": 0.9,
-    "capabilities": ["thinking", "reasoning", "complex-reasoning"],
+    "capabilities": [
+      "thinking",
+      "reasoning",
+      "complex-reasoning"
+    ],
     "historical_success_rate": 0.96
   },
   {
@@ -50,7 +75,15 @@
     "input_cost_per_1k": 0.002,
     "output_cost_per_1k": 0.005,
     "relative_latency": 1.0,
-    "capabilities": ["coding", "math", "sql", "json", "complex-reasoning", "agent-planning", "thinking"],
+    "capabilities": [
+      "coding",
+      "math",
+      "sql",
+      "json",
+      "complex-reasoning",
+      "agent-planning",
+      "thinking"
+    ],
     "historical_success_rate": 0.98
   },
   {
@@ -59,43 +92,10 @@
     "input_cost_per_1k": 0.01,
     "output_cost_per_1k": 0.01,
     "relative_latency": 0.8,
-    "capabilities": ["image-generation", "creative-writing"],
+    "capabilities": [
+      "image-generation",
+      "creative-writing"
+    ],
     "historical_success_rate": 0.95
-  },
-  {
-    "name": "accounts/fireworks/models/llama-v3p1-8b-instruct",
-    "context_length": 131072,
-    "input_cost_per_1k": 0.0002,
-    "output_cost_per_1k": 0.0002,
-    "relative_latency": 0.2,
-    "capabilities": ["general", "summarization", "translation", "short-context"],
-    "historical_success_rate": 0.88
-  },
-  {
-    "name": "accounts/fireworks/models/llama-v3p1-70b-instruct",
-    "context_length": 131072,
-    "input_cost_per_1k": 0.0009,
-    "output_cost_per_1k": 0.0009,
-    "relative_latency": 0.5,
-    "capabilities": ["general", "reasoning", "creative-writing", "rag", "long-context"],
-    "historical_success_rate": 0.94
-  },
-  {
-    "name": "accounts/fireworks/models/qwen2p5-coder-32b-instruct",
-    "context_length": 32768,
-    "input_cost_per_1k": 0.0007,
-    "output_cost_per_1k": 0.0007,
-    "relative_latency": 0.4,
-    "capabilities": ["coding", "debugging", "json", "sql"],
-    "historical_success_rate": 0.97
-  },
-  {
-    "name": "accounts/fireworks/models/deepseek-r1",
-    "context_length": 128000,
-    "input_cost_per_1k": 0.002,
-    "output_cost_per_1k": 0.008,
-    "relative_latency": 1.0,
-    "capabilities": ["thinking", "complex-reasoning", "math", "agent-planning"],
-    "historical_success_rate": 0.99
   }
 ]
