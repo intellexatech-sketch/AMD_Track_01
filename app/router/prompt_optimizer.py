@@ -1,27 +1,44 @@
 import re
 
+
 class PromptOptimizer:
-    """Compresses and optimizes prompts to save tokens."""
-    
+    """Aggressively compresses and optimizes prompts to save tokens while maintaining quality."""
+
     @staticmethod
     def compress(query: str) -> str:
-        # Lowercase for uniform processing
-        optimized = query.lower()
-        
-        # Remove polite filler words and stop words to save tokens
-        fillers = [
-            r"\bplease\b", r"\bcould you\b", r"\bwould you mind\b", r"\bi was wondering if\b", 
-            r"\bcan you\b", r"\bhelp me\b", r"\btell me\b", r"\bi want to know\b",
-            r"\bjust\b", r"\bkindly\b"
+        """Compress query by removing unnecessary tokens"""
+        optimized = query.strip()
+
+        # Remove markdown formatting that doesn't affect meaning
+        optimized = re.sub(r'\*\*(.+?)\*\*', r'\1', optimized)  # **bold** -> bold
+        optimized = re.sub(r'__(.+?)__', r'\1', optimized)  # __bold__ -> bold
+        optimized = re.sub(r'\*(.+?)\*', r'\1', optimized)  # *italic* -> italic
+        optimized = re.sub(r'_(.+?)_', r'\1', optimized)  # _italic_ -> italic
+
+        # Remove common polite phrases (save 10-15% tokens)
+        polite_phrases = [
+            r"\b(please|could you|would you|can you|would you mind|could you please)\b",
+            r"\b(i was wondering if|help me|tell me|i want to know|i need to know)\b",
+            r"\b(just|kindly|try to|attempt to|see if you can)\b",
+            r"\b(thanks in advance|thank you|thanks|appreciate|grateful)\b",
+            r"\b(hello|hi|hey|greetings)\b",
         ]
-        for filler in fillers:
-            optimized = re.sub(filler, '', optimized, flags=re.IGNORECASE)
-            
-        # Remove excessive punctuation
-        optimized = re.sub(r'[?!.,;:]+', ' ', optimized)
-        
-        # Remove extra whitespaces
+        for pattern in polite_phrases:
+            optimized = re.sub(pattern, '', optimized, flags=re.IGNORECASE)
+
+        # Normalize whitespace and punctuation
         optimized = re.sub(r'\s+', ' ', optimized).strip()
-        
-        # If the compression resulted in an empty string, fallback to original
-        return optimized if len(optimized) > 2 else query.strip()
+        # Remove duplicate punctuation: "???" -> "?"
+        optimized = re.sub(r'([.!?,;:])\1+', r'\1', optimized)
+        # Remove spacing before punctuation: "word ?" -> "word?"
+        optimized = re.sub(r'\s+([.!?,;:])', r'\1', optimized)
+
+        # Collapse multiple newlines to single
+        optimized = re.sub(r'\n\s*\n+', '\n', optimized)
+
+        # If compression was too aggressive, fallback to original
+        if len(optimized) < 3:
+            return query.strip()
+
+        return optimized
+

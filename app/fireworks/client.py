@@ -2,32 +2,54 @@ import litellm
 import time
 import os
 from app.config import settings
+from app.utils.token_counter import TokenCounter
 
 os.environ["FIREWORKS_API_KEY"] = settings.FIREWORKS_API_KEY
 litellm.api_key = settings.FIREWORKS_API_KEY
 litellm.drop_params = True
 
+
 class FireworksClient:
     """Wrapper for Fireworks AI via LiteLLM"""
-    
-    @staticmethod
-    def generate(model: str, prompt: str) -> dict:
+
+    def __init__(self):
+        self.token_counter = TokenCounter()
+        self.model_costs = self._build_model_costs()
+
+    def _build_model_costs(self) -> dict:
+        """Build a mapping of model names to their costs"""
+        costs = {}
+        for model in settings.models:
+            costs[model["name"]] = {
+                "input_cost_per_1k": model.get("input_cost_per_1k", 0),
+                "output_cost_per_1k": model.get("output_cost_per_1k", 0)
+            }
+        return costs
+
+    def generate(self, model: str, prompt: str) -> dict:
         start_time = time.time()
-        
+
         try:
             response = litellm.completion(
                 model=f"fireworks_ai/{model}",
                 messages=[{"role": "user", "content": prompt}],
                 temperature=0.1
             )
-            
+
             latency = (time.time() - start_time) * 1000
             content = response.choices[0].message.content
             usage = response.usage
-            
-            # Approximate cost calculation based on Fireworks pricing
-            cost = (usage.prompt_tokens * 0.0005 + usage.completion_tokens * 0.001) / 1000
-            
+
+            # Use actual model costs from config
+            model_cost_info = self.model_costs.get(model, {})
+            input_cost_per_1k = model_cost_info.get("input_cost_per_1k", 0.0001)
+            output_cost_per_1k = model_cost_info.get("output_cost_per_1k", 0.0002)
+
+            cost = (
+                (usage.prompt_tokens * input_cost_per_1k / 1000) +
+                (usage.completion_tokens * output_cost_per_1k / 1000)
+            )
+
             return {
                 "content": content,
                 "tokens": usage.total_tokens,
@@ -43,3 +65,4 @@ class FireworksClient:
                 "cost": 0.0,
                 "success": False
             }
+

@@ -24,10 +24,12 @@ class PromptAnalyzer:
         return sum(len(re.findall(p, text, re.IGNORECASE)) for p in patterns)
 
     def extract_features(self, query: str) -> Dict[str, Any]:
+        from app.utils.token_counter import TokenCounter
         q_lower = query.lower()
         length = len(query)
-        # Rough token estimation (4 chars per token)
-        est_tokens = length // 4
+        # Better token estimation using tiktoken
+        token_counter = TokenCounter()
+        est_tokens = token_counter.count_tokens(query)
         
         has_code = self._count_pattern_matches(query, self.code_patterns) > 0
         has_math = self._count_pattern_matches(query, self.math_patterns) > 0
