@@ -11,14 +11,13 @@ class FireworksClient:
     """Wrapper for Fireworks AI via LiteLLM"""
     
     @staticmethod
-    def generate(model: str, prompt: str, max_tokens: int = 1024) -> dict:
+    def generate(model: str, prompt: str) -> dict:
         start_time = time.time()
         
         try:
             response = litellm.completion(
                 model=f"fireworks_ai/{model}",
                 messages=[{"role": "user", "content": prompt}],
-                max_tokens=max_tokens,
                 temperature=0.1
             )
             

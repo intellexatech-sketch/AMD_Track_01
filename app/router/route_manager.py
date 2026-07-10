@@ -15,11 +15,6 @@ class RouteManager:
         self.client = FireworksClient()
         self.optimizer = PromptOptimizer()
         
-    def _get_max_tokens(self, complexity: float) -> int:
-        if complexity < 0.3: return 256
-        if complexity < 0.7: return 512
-        return 1024
-
     def route_query(self, query: str) -> dict:
         # 1. Check Cache
         cached_result = self.cache.get(query)
@@ -32,7 +27,6 @@ class RouteManager:
 
         # 3. Analyze Prompt Features and Complexity
         features, complexity = self.analyzer.analyze(optimized_query)
-        max_tokens = self._get_max_tokens(complexity)
         
         # 4. Rank Models
         ranked_models = self.model_selector.rank_models(features, complexity)
@@ -64,7 +58,7 @@ class RouteManager:
             # FireworksClient expects "model" and prepends fireworks_ai/, so we pass the raw name
             # which is accounts/fireworks/models/glm-5p1 for example
             
-            result = self.client.generate(model_name, optimized_query, max_tokens=max_tokens)
+            result = self.client.generate(model_name, optimized_query)
             
             if result["success"]:
                 category = "General"
