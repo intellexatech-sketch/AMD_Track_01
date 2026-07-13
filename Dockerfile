@@ -7,7 +7,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app/ ./app/
 COPY frontend/ ./frontend/
-ENV PYTHONPATH=/
+ENV PYTHONPATH=/app
 ENV PORT=8000
 
 EXPOSE 8000
