@@ -1,20 +1,48 @@
-version: '3.8'
-
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      FIREWORKS_API_KEY: ${FIREWORKS_API_KEY:-}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SQLITE_DB_PATH: sqlite:///./data/app_metrics.db
     ports:
       - "8000:8000"
-    environment:
-      - FIREWORKS_API_KEY=${FIREWORKS_API_KEY}
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-    depends_on:
-      - redis
     volumes:
-      - ./metrics.db:/metrics.db
+      - app_data:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health').read()"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   redis:
-    image: redis:alpine
+    image: redis:7-alpine
     ports:
       - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  app_data:
+  redis_data:
